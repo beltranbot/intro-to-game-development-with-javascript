@@ -33,6 +33,10 @@ class Paddle {
   moveRight () {
     this.speed = this.maxSpeed
   }
+
+  stop () {
+    this.speed = 0
+  }
   
   update(deltaTime) {
     if (!deltaTime) return
