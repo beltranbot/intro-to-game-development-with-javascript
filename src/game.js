@@ -20,6 +20,7 @@ export class Game {
     this.ball = new Ball(this)
     this.paddle = new Paddle(this)
     this.gameObjects = []
+    this.lives = 3
 
     new InputHandler(this.paddle, this)
   }
@@ -38,7 +39,10 @@ export class Game {
   }
 
   update(deltaTime) {
-    if (this.gamestate === GAMESTATE.PAUSED || this.gamestate === GAMESTATE.MENU) return
+    if (this.lives === 0) this.gamestate = GAMESTATE.GAMEOVER
+    if (this.gamestate === GAMESTATE.PAUSED ||
+      this.gamestate === GAMESTATE.MENU ||
+      this.gamestate === GAMESTATE.GAMEOVER) return
     this.gameObjects.forEach(object => object.update(deltaTime))
 
     this.gameObjects = this.gameObjects.filter(brick => !brick.markedForDeletion)
@@ -46,8 +50,9 @@ export class Game {
 
   draw(ctx) {
     this.gameObjects.forEach(object => object.draw(ctx))
+    
+    // game paused
     if (this.gamestate == GAMESTATE.PAUSED) {
-      console.log('paused')
       ctx.rect(0, 0, this.gameWidth, this.gameHeight)
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
       ctx.fill()
@@ -57,8 +62,8 @@ export class Game {
       ctx.fillText("Paused", this.gameWidth / 2, this.gameHeight / 2)
     }
 
+    // start menu
     if (this.gamestate == GAMESTATE.MENU) {
-      console.log('paused')
       ctx.rect(0, 0, this.gameWidth, this.gameHeight)
       ctx.fillStyle = 'rgba(0, 0, 0, 1)'
       ctx.fill()
@@ -67,8 +72,19 @@ export class Game {
       ctx.textAlign = "center"
       ctx.fillText("Press SPACEBAR to start", this.gameWidth / 2, this.gameHeight / 2)
     }
-  }
 
+    // game over
+    if (this.gamestate == GAMESTATE.GAMEOVER) {
+      ctx.rect(0, 0, this.gameWidth, this.gameHeight)
+      ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+      ctx.fill()
+      ctx.font = "30px Arial"
+      ctx.fillStyle = "white"
+      ctx.textAlign = "center"
+      ctx.fillText("GAME OVER", this.gameWidth / 2, this.gameHeight / 2)
+    }
+  }
+  
   togglePause() {
     if (this.gamestate === GAMESTATE.PAUSED) {
       this.gamestate = GAMESTATE.RUNNING
