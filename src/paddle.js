@@ -20,6 +20,11 @@ class Paddle {
       this.height
     )
   }
+
+  update(deltaTime) {
+    if (!deltaTime) return
+    this.position.x += 5 / deltaTime
+  }
 }
 
 export default Paddle
