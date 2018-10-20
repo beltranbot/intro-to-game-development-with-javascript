@@ -1,5 +1,6 @@
 import Paddle from './paddle.js'
 import InputHandler from './input.js'
+import Ball from '/src/ball.js'
 
 let canvas = document.getElementById("gameScreen")
 
@@ -11,6 +12,7 @@ const GAME_HEIGHT = 600
 ctx.clearRect(0,0, 800, 600)
 
 let paddle = new Paddle(GAME_WIDTH, GAME_HEIGHT)
+let ball = new Ball()
 
 new InputHandler(paddle)
 
@@ -23,6 +25,9 @@ function gameLoop(timestamp) {
 
   paddle.update(deltaTime)
   paddle.draw(ctx)
+  ball.draw(ctx)
+
+  
 
   requestAnimationFrame(gameLoop)
 }

@@ -28,7 +28,7 @@ class InputHandler {
           }
           break
         default:
-          break;
+          break
       }
     })
   }
