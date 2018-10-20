@@ -1,7 +1,6 @@
 import Ball from './ball.js'
 import Paddle from './paddle.js'
 import InputHandler from './input.js'
-import Brick from './brick.js'
 
 import {buildLevel, level1} from './levels.js'
 
@@ -15,12 +14,12 @@ class Game {
     this.ball = new Ball(this)
     this.paddle = new Paddle(this)
 
-    let bricks = buildLevel(this, level1)
+    this.bricks = buildLevel(this, level1)
 
     this.gameObjects = [
       this.ball,
       this.paddle,
-      ...bricks
+      ...this.bricks
     ]
 
     new InputHandler(this.paddle)
@@ -28,6 +27,8 @@ class Game {
 
   update(deltaTime) {
     this.gameObjects.forEach(object => object.update(deltaTime))
+
+    this.gameObjects = this.gameObjects.filter(brick => !brick.markedForDeletion)
   }
 
   draw(ctx) {
